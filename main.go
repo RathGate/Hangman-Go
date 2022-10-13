@@ -1,7 +1,10 @@
 package main
 
-import "fmt"
+import (
+	"hangman/ascii"
+)
 
 func main() {
-	fmt.Println("Let's GOOO")
+	charSet := ascii.GetCharSet("thinkertoy.txt", 8)
+	ascii.PrintAsciiWord("Hello World", charSet)
 }
