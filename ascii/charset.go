@@ -9,7 +9,7 @@ import (
 )
 
 // TODO: Error handling
-func GetCharSet(filename string, charSize int) (result [][]string) {
+func GetCharSet(filename string, charSize int) [][]string {
 	// Opens charset file
 	path := "assets/ascii/" + filename
 	content, err := os.ReadFile(path)
@@ -18,7 +18,7 @@ func GetCharSet(filename string, charSize int) (result [][]string) {
 	}
 
 	// Parses into array
-	re := regexp.MustCompile(fmt.Sprintf(`(?:\n)((.+\n){%d})`, charSize))
+	re := regexp.MustCompile(fmt.Sprintf(`(?:\r\n)((.+\n){%d})`, charSize))
 	arr := re.FindAllString(string(content), -1)
 
 	return SplitCharSet(arr)
@@ -27,8 +27,10 @@ func GetCharSet(filename string, charSize int) (result [][]string) {
 // Splits each char into an array of size [char.height]
 // Returns a 2D array.
 func SplitCharSet(charset []string) (result [][]string) {
-	for _, elem := range charset {
-		splitted := strings.Split(elem, "\r\n")
+	for _, char := range charset {
+		splitted := strings.Split(char, "\r\n")
+		// excludes arr[0] and arr[max] which are only composed
+		// of \r\n characters.
 		result = append(result, splitted[1:len(splitted)-1])
 	}
 	return result
@@ -44,7 +46,6 @@ func GetAsciiChar(char rune, charset [][]string) []string {
 // Translates an entire word into its ASCII art equivalent.
 func MakeAsciiWord(word string, charset [][]string) []string {
 	var result = make([]string, len(charset[0]))
-
 	if len(word) == 0 {
 		return nil
 	}
