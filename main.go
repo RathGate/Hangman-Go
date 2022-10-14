@@ -5,8 +5,8 @@ import (
 )
 
 func main() {
-	charSet := ascii.GetCharSet("standard.txt", 8)
-	charSet2 := ascii.GetCharSet("shadow.txt", 8)
-	ascii.PrintAsciiWord("Ladies and Gentlemen", charSet)
-	ascii.PrintAsciiWord("The Weeknd", charSet2)
+	// utils.PrintError("bonjour")
+	charSet := ascii.GetCharset("shadow.txt", 8)
+	ascii.PrintAsciiWord("Stay hydrated bois", charSet)
+
 }
