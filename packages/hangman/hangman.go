@@ -5,12 +5,13 @@ import (
 	"fmt"
 	"math/rand"
 	"os"
+	"strings"
 	"time"
 )
 
 type HangManData struct {
-	Word   string // Word composed of '_', ex: H_ll_
-	ToFind string // Final word chosen by the program at the beginning. It is the word to find
+	Word      string // Word composed of '_', ex: H_ll_
+	FinalWord string // Final word chosen by the program at the beginning. It is the word to find
 	//Attempts         int // Number of attempts left
 	//HangmanPositions [10]string // It can be the array where the positions parsed in "hangman.txt" are stored
 }
@@ -46,4 +47,14 @@ func ReadFile(filename string) []string {
 func RandomWord(lines []string) string {
 	//fmt.Println(rand.Intn(len(lines)))
 	return lines[rand.Intn(len(lines))]
+}
+
+func (h *HangManData) InitHangMan(word string) {
+	h.Word = strings.Repeat("_", len(word))
+	n := len(word)/2 - 1
+
+	for i := 0; i < n; i++ {
+		r := rand.Intn(len(word))
+		h.Word = h.Word[:r] + string(word[r]) + h.Word[r+1:]
+	}
 }
