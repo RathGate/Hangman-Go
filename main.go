@@ -1,16 +1,16 @@
 package main
 
 import (
-	"fmt"
-	"hangman/hangman"
+	"hangman/packages/ascii"
+	"hangman/packages/hangman"
 	"os"
 )
 
 func main() {
 	filename := os.Args[1]
-
-	fmt.Println("Let's GOOO")
-
+	charset := ascii.GetCharset("standard.txt", 8)
 	lines := hangman.ReadFile(filename)
-	fmt.Println(hangman.RandomWord(lines))
+	randomWord := hangman.RandomWord(lines)
+
+	ascii.PrintAsciiWord(randomWord, charset)
 }
