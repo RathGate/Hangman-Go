@@ -2,7 +2,7 @@ package ascii
 
 import (
 	"fmt"
-	"hangman/utils"
+	"hangman/packages/utils"
 	"os"
 	"regexp"
 	"strings"
