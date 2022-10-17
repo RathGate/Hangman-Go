@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"hangman/packages/hangman"
 	"hangman/packages/utils"
 	"math/rand"
@@ -21,6 +22,7 @@ func main() {
 	lines := hangman.ReadFile(filename)
 
 	randomWord := hangman.RandomWord(lines)
+	fmt.Println(randomWord)
 
 	hangmanData.InitGame(randomWord)
 	for hangmanData.Attempts > 0 && !hangmanData.IsDiscovered() {
