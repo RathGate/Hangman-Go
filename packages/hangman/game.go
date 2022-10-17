@@ -17,16 +17,18 @@ type HangManData struct {
 	//HangmanPositions [10]string // It can be the array where the positions parsed in "hangman.txt" are stored
 }
 
-func (data *HangManData) InitGame(word string) {
-	data.FinalWord = strings.ToUpper(word)
-	data.Word = strings.Repeat("_", len(word))
-	n := len(word)/2 - 1
+func (data *HangManData) InitGame(filename string) {
+	// Reads files and gets a random word from it.
+	data.FinalWord = RandomWord(ReadFile(filename))
+
+	data.Word = strings.Repeat("_", len(data.FinalWord))
+	n := len(data.FinalWord)/2 - 1
 	for i := 0; i < n; {
-		r := rand.Intn(len(word))
+		r := rand.Intn(len(data.FinalWord))
 		if data.Word[r] != byte('_') {
 			continue
 		} else {
-			data.Word = data.Word[:r] + string(word[r]) + data.Word[r+1:]
+			data.Word = data.Word[:r] + string(data.FinalWord[r]) + data.Word[r+1:]
 			i++
 		}
 	}
@@ -63,5 +65,6 @@ func RandomWord(lines []string) string {
 	}
 
 	rand.Seed(time.Now().UnixNano())
-	return lines[rand.Intn(len(lines))]
+	result := lines[rand.Intn(len(lines))]
+	return strings.ToUpper(result)
 }

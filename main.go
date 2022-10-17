@@ -5,25 +5,24 @@ import (
 	"hangman/packages/utils"
 	"math/rand"
 	"os"
-	"strings"
 	"time"
 )
 
+var hangmanData hangman.HangManData
+
 func main() {
+	// Initializes random seed and empties console before game starts.
 	rand.Seed(time.Now().UnixNano())
 	utils.ConsoleClear()
 
-	var hangmanData hangman.HangManData
-
+	// Checks for dict file in program args.
 	if len(os.Args) == 1 {
 		utils.PrintError("No dictionary file specified.")
 	}
 	filename := os.Args[1]
-	lines := hangman.ReadFile(filename)
 
-	randomWord := strings.ToUpper(hangman.RandomWord(lines))
-
-	hangmanData.InitGame(randomWord)
+	// Launches game itself.
+	hangmanData.InitGame(filename)
 	for hangmanData.Attempts > 0 && !hangmanData.IsDiscovered() {
 		hangman.NewRound(&hangmanData)
 	}
