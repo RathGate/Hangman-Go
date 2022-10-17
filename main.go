@@ -1,11 +1,11 @@
 package main
 
 import (
-	"fmt"
 	"hangman/packages/hangman"
 	"hangman/packages/utils"
 	"math/rand"
 	"os"
+	"strings"
 	"time"
 )
 
@@ -21,8 +21,7 @@ func main() {
 	filename := os.Args[1]
 	lines := hangman.ReadFile(filename)
 
-	randomWord := hangman.RandomWord(lines)
-	fmt.Println(randomWord)
+	randomWord := strings.ToUpper(hangman.RandomWord(lines))
 
 	hangmanData.InitGame(randomWord)
 	for hangmanData.Attempts > 0 && !hangmanData.IsDiscovered() {

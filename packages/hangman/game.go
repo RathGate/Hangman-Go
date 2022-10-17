@@ -20,7 +20,6 @@ type HangManData struct {
 func (data *HangManData) InitGame(word string) {
 	data.FinalWord = strings.ToUpper(word)
 	data.Word = strings.Repeat("_", len(word))
-	fmt.Println(data.FinalWord)
 	n := len(word)/2 - 1
 	for i := 0; i < n; {
 		r := rand.Intn(len(word))
