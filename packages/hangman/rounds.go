@@ -1,4 +1,4 @@
-package game
+package hangman
 
 import (
 	"fmt"
@@ -10,7 +10,7 @@ import (
 
 // Checks if the word had been entirely uncovered.
 func (data *HangManData) IsDiscovered() bool {
-	return data.Word == data.ToFind
+	return data.Word == data.FinalWord
 }
 
 // Prints the word with spaces between letters for readability.
@@ -32,11 +32,11 @@ func (data *HangManData) PrintWord() {
 func NewRound(data *HangManData) {
 	// Asks user for input and processes the answer.
 	answer := utils.GetUserInput()
-	processed := ProcessAnswer(data.ToFind, answer)
+	processed := ProcessAnswer(data.FinalWord, answer)
 
 	if processed == 1 {
 		// Word has been discovered
-		data.Word = data.ToFind
+		data.Word = data.FinalWord
 	} else if processed == 0 {
 		// TODO: Uncover letters
 		data.PrintWord()

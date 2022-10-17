@@ -1,4 +1,4 @@
-package game
+package hangman
 
 import (
 	"bufio"
@@ -11,16 +11,27 @@ import (
 )
 
 type HangManData struct {
-	Word     string // Word composed of '_', ex: H_ll_
-	ToFind   string // Final word chosen by the program at the beginning. It is the word to find
-	Attempts int    // Number of attempts left
+	Word      string // Word composed of '_', ex: H_ll_
+	FinalWord string // Final word chosen by the program at the beginning. It is the word to find
+	Attempts  int    // Number of attempts left
 	//HangmanPositions [10]string // It can be the array where the positions parsed in "hangman.txt" are stored
 }
 
 func (data *HangManData) InitGame(word string) {
-	data.ToFind = strings.ToUpper(word)
-	// TODO: replace with evz's functions.
+	data.FinalWord = strings.ToUpper(word)
 	data.Word = strings.Repeat("_", len(word))
+	fmt.Println(data.FinalWord)
+	n := len(word)/2 - 1
+	for i := 0; i < n; {
+		r := rand.Intn(len(word))
+		if data.Word[r] != byte('_') {
+			continue
+		} else {
+			data.Word = data.Word[:r] + string(word[r]) + data.Word[r+1:]
+			i++
+		}
+	}
+
 	data.Attempts = 10
 
 	fmt.Println("Good luck, you have 10 attempts.")
