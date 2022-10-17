@@ -52,9 +52,14 @@ func RandomWord(lines []string) string {
 func (h *HangManData) InitHangMan(word string) {
 	h.Word = strings.Repeat("_", len(word))
 	n := len(word)/2 - 1
-
-	for i := 0; i < n; i++ {
+	fmt.Println(n)
+	for i := 0; i < n; {
 		r := rand.Intn(len(word))
-		h.Word = h.Word[:r] + string(word[r]) + h.Word[r+1:]
+		if h.Word[r] != byte('_') {
+			continue
+		} else {
+			h.Word = h.Word[:r] + string(word[r]) + h.Word[r+1:]
+			i++
+		}
 	}
 }
