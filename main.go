@@ -1,22 +1,33 @@
 package main
 
 import (
-	//"hangman/packages/ascii"
-	"fmt"
 	"hangman/packages/hangman"
+	"hangman/packages/utils"
+	"math/rand"
 	"os"
+	"strings"
+	"time"
 )
 
 func main() {
-	filename := os.Args[1]
-	//charset := ascii.GetCharset("standard.txt", 8)
-	lines := hangman.ReadFile(filename)
-	randomWord := hangman.RandomWord(lines)
-	fmt.Println(randomWord)
+	rand.Seed(time.Now().UnixNano())
+	utils.ConsoleClear()
 
 	var hangmanData hangman.HangManData
-	hangmanData.InitHangMan(randomWord)
-	fmt.Println(hangmanData.Word)
 
-	//ascii.PrintAsciiWord(randomWord, charset)
+	if len(os.Args) == 1 {
+		utils.PrintError("No dictionary file specified.")
+	}
+	filename := os.Args[1]
+	lines := hangman.ReadFile(filename)
+
+	randomWord := strings.ToUpper(hangman.RandomWord(lines))
+
+	hangmanData.InitGame(randomWord)
+	for hangmanData.Attempts > 0 && !hangmanData.IsDiscovered() {
+		hangman.NewRound(&hangmanData)
+	}
+
+	// TODO: here the game stops once attempts == 0 or
+	// word had been discovered, without any message printed or anything.
 }

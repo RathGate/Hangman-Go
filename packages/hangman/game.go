@@ -3,6 +3,7 @@ package hangman
 import (
 	"bufio"
 	"fmt"
+	"hangman/packages/utils"
 	"math/rand"
 	"os"
 	"strings"
@@ -12,24 +13,36 @@ import (
 type HangManData struct {
 	Word      string // Word composed of '_', ex: H_ll_
 	FinalWord string // Final word chosen by the program at the beginning. It is the word to find
-	//Attempts         int // Number of attempts left
+	Attempts  int    // Number of attempts left
 	//HangmanPositions [10]string // It can be the array where the positions parsed in "hangman.txt" are stored
 }
 
-func init() {
-	rand.Seed(time.Now().UnixNano())
+func (data *HangManData) InitGame(word string) {
+	data.FinalWord = strings.ToUpper(word)
+	data.Word = strings.Repeat("_", len(word))
+	n := len(word)/2 - 1
+	for i := 0; i < n; {
+		r := rand.Intn(len(word))
+		if data.Word[r] != byte('_') {
+			continue
+		} else {
+			data.Word = data.Word[:r] + string(word[r]) + data.Word[r+1:]
+			i++
+		}
+	}
+
+	data.Attempts = 10
+
+	fmt.Println("Good luck, you have 10 attempts.")
+	data.PrintWord()
 }
 
-func check(e error) {
-	if e != nil {
-		panic(e)
-	}
-}
 func ReadFile(filename string) []string {
 
-	fmt.Println(filename)
 	file, err := os.Open("assets/dict/" + filename)
-	check(err)
+	if err != nil {
+		utils.PrintError(err.Error())
+	}
 
 	scanner := bufio.NewScanner(file)
 	scanner.Split(bufio.ScanLines)
@@ -45,21 +58,10 @@ func ReadFile(filename string) []string {
 }
 
 func RandomWord(lines []string) string {
-	//fmt.Println(rand.Intn(len(lines)))
-	return lines[rand.Intn(len(lines))]
-}
-
-func (h *HangManData) InitHangMan(word string) {
-	h.Word = strings.Repeat("_", len(word))
-	n := len(word)/2 - 1
-	fmt.Println(n)
-	for i := 0; i < n; {
-		r := rand.Intn(len(word))
-		if h.Word[r] != byte('_') {
-			continue
-		} else {
-			h.Word = h.Word[:r] + string(word[r]) + h.Word[r+1:]
-			i++
-		}
+	if len(lines) == 0 {
+		utils.PrintError("Specified file is empty.")
 	}
+
+	rand.Seed(time.Now().UnixNano())
+	return lines[rand.Intn(len(lines))]
 }
