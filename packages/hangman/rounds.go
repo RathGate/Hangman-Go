@@ -38,7 +38,7 @@ func NewRound(data *HangManData) {
 		// Word has been discovered
 		data.Word = data.FinalWord
 	} else if processed == 0 {
-		// TODO: Uncover letters
+		data.RevealLetter(answer)
 		data.PrintWord()
 	} else {
 		// The player had made a mistake = remove points.
@@ -47,6 +47,15 @@ func NewRound(data *HangManData) {
 			fmt.Printf("Not present in the word, %d attempts remaining.\n", data.Attempts)
 			fmt.Println(aurora.BgBrightCyan("Big José par ici."))
 			fmt.Println()
+		}
+	}
+}
+
+func (data *HangManData) RevealLetter(answer string) {
+
+	for i, letter := range data.FinalWord {
+		if answer == string(letter) {
+			data.Word = data.Word[:i] + string(data.FinalWord[i]) + data.Word[i+1:]
 		}
 	}
 }
