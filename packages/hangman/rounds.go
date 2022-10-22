@@ -78,7 +78,11 @@ func (data *HangManData) AddUsedLetters(letter string) {
 }
 
 func (data *HangManData) PrintStockedLetters() {
-	fmt.Println("Used letters :", aurora.BgBlue(data.UsedLetters))
+	fmt.Print("Used letters: ")
+	for _, letter := range data.UsedLetters {
+		fmt.Printf("%v ", letter)
+	}
+	fmt.Println()
 }
 
 // Returns an int based on the points the player should lose or not.
