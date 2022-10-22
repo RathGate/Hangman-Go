@@ -1,7 +1,7 @@
 // All the functions used specifically to display
 // the menus of the hangman game.
 
-package main
+package ui
 
 import (
 	"fmt"

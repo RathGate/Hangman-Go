@@ -1,6 +1,6 @@
 // All the functions used globally across all demo programs.
 
-package main
+package ui
 
 import (
 	"fmt"

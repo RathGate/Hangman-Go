@@ -8,6 +8,11 @@ import (
 	"strings"
 )
 
+type Charsets struct {
+	Jose       [][]string
+	Characters [][]string
+}
+
 /* BASE EXPLANATION :
 → A charset is an array of size 95 containing all ASCII printable characters (32-127).
 Each character is itself an array of all the lines composing the character.
@@ -16,9 +21,9 @@ Each character is itself an array of all the lines composing the character.
 // Returns the 2D array charset from the specified filename.
 // charSize is the number of lines composing the character,
 // here, all three given files share a charSize of 8.
-func GetCharset(filename string, charSize int) [][]string {
+func GetCharset(path string, charsetSize, charSize int) [][]string {
 	// Opens charset file
-	path := "assets/ascii/" + filename
+
 	content, err := os.ReadFile(path)
 	if err != nil {
 		utils.PrintError(err.Error())
@@ -27,8 +32,8 @@ func GetCharset(filename string, charSize int) [][]string {
 	// Splits the content of the file into an array of 95 characters.
 	re := regexp.MustCompile(fmt.Sprintf(`(?:\r\n)((.+\n){%d})`, charSize))
 	tempCharset := re.FindAllString(string(content), -1)
-	if len(tempCharset) != 95 {
-		utils.PrintError(fmt.Sprintf("load %v: invalid file format. \nThe file should contain 95 characters and the system detected %v character(s).", path, len(tempCharset)))
+	if len(tempCharset) != charsetSize {
+		utils.PrintError(fmt.Sprintf("load %v: invalid file format. \nThe file should contain %v characters and the system detected %v character(s).", path, charsetSize, len(tempCharset)))
 	}
 
 	// Splits each character of the preceding array into an array of lines.
@@ -95,7 +100,7 @@ func MakeAsciiWord(word string, charset [][]string) []string {
 }
 
 // Prints the ASCII word line by line.
-func PrintAsciiWord(word string, charset [][]string) {
+func PrintAscii(word string, charset [][]string) {
 	asciiWord := MakeAsciiWord(word, charset)
 
 	// Checks if word is nil or empty.
@@ -104,6 +109,13 @@ func PrintAsciiWord(word string, charset [][]string) {
 		return
 	}
 	for _, line := range asciiWord {
+		fmt.Println(line)
+	}
+}
+
+func PrintJose(joses [][]string, attempts int) {
+	position := len(joses) - 1 - attempts
+	for _, line := range joses[position] {
 		fmt.Println(line)
 	}
 }
