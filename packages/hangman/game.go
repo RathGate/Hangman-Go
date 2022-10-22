@@ -11,16 +11,15 @@ import (
 )
 
 type HangManData struct {
-	Word        string // Word composed of '_', ex: H_ll_
-	FinalWord   string // Final word chosen by the program at the beginning. It is the word to find
-	Attempts    int    // Number of attempts left
+	Word      string // Word composed of '_', ex: H_ll_
+	FinalWord string // Final word chosen by the program at the beginning. It is the word to find
+	Attempts  int    // Number of attempts left
 	UsedLetters []string
-	//HangmanPositions [10]string // It can be the array where the positions parsed in "hangman.txt" are stored
 }
 
-func (data *HangManData) InitGame(filename string) {
+func (data *HangManData) InitGame(dictFile string, charset [][]string) {
 	// Reads files and gets a random word from it.
-	data.FinalWord = RandomWord(ReadFile(filename))
+	data.FinalWord = RandomWord(ReadFile(dictFile))
 
 	data.Word = strings.Repeat("_", len(data.FinalWord))
 	n := len(data.FinalWord)/2 - 1
@@ -37,7 +36,7 @@ func (data *HangManData) InitGame(filename string) {
 	data.Attempts = 10
 
 	fmt.Println("Good luck, you have 10 attempts.")
-	data.PrintWord()
+	data.PrintWord(charset)
 }
 
 func ReadFile(filename string) []string {

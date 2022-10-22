@@ -2,10 +2,9 @@ package hangman
 
 import (
 	"fmt"
+	"hangman/packages/ascii"
 	"hangman/packages/utils"
 	"strings"
-
-	"github.com/logrusorgru/aurora"
 )
 
 // Checks if the word had been entirely uncovered.
@@ -14,22 +13,26 @@ func (data *HangManData) IsDiscovered() bool {
 }
 
 // Prints the word with spaces between letters for readability.
-func (data *HangManData) PrintWord() {
+func (data *HangManData) PrintWord(charset [][]string) {
 	if len(data.Word) == 0 {
 		utils.PrintError("Something went wrong, please try again.")
 	}
-	for i, char := range data.Word {
-		fmt.Print(string(char))
-		if i != len(data.Word)-1 {
-			fmt.Print(" ")
+	if charset != nil {
+		ascii.PrintAscii(data.Word, charset)
+	} else {
+		for i, char := range data.Word {
+			fmt.Print(string(char))
+			if i != len(data.Word)-1 {
+				fmt.Print(" ")
+			}
 		}
+		fmt.Print("\n")
 	}
-	fmt.Print("\n\n")
-
+	fmt.Print("\n")
 }
 
 // Launches a round of the game.
-func NewRound(data *HangManData) {
+func NewRound(data *HangManData, charset *ascii.Charsets) {
 	// Asks user for input and processes the answer.
 	answer := utils.GetUserInput()
 	processed := data.ProcessAnswer(data.FinalWord, answer)
@@ -39,15 +42,19 @@ func NewRound(data *HangManData) {
 		data.Word = data.FinalWord
 	} else if processed == 0 {
 		data.RevealLetter(answer)
-		data.PrintWord()
+		data.PrintWord(charset.Characters)
+
 	} else {
 		// The player had made a mistake = remove points.
 		data.Attempts += processed
-		if data.Attempts > 0 {
-			fmt.Printf("Not present in the word, %d attempts remaining.\n", data.Attempts)
-			fmt.Println(aurora.BgBrightCyan("Big José par ici."))
-			fmt.Println()
+		if data.Attempts < 0 {
+			data.Attempts = 0
 		}
+
+		fmt.Printf("Not present in the word, %d attempts remaining.\n", data.Attempts)
+		ascii.PrintJose(charset.Jose, data.Attempts)
+		fmt.Println()
+
 	}
 }
 
