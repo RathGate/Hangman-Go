@@ -63,15 +63,15 @@ func (data *HangManData) RevealLetter(answer string) {
 func (data *HangManData) AddUsedLetters(letter string) {
 	for _, char := range data.UsedLetters {
 		if char == letter {
+			fmt.Println("You already tried that letter.")
 			return
 		}
-
 	}
 	data.UsedLetters = append(data.UsedLetters, letter)
 }
 
 func (data *HangManData) PrintStockedLetters() {
-	fmt.Println(data.UsedLetters)
+	fmt.Println("Used letters :", aurora.BgBlue(data.UsedLetters))
 }
 
 // Returns an int based on the points the player should lose or not.
