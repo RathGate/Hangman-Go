@@ -28,6 +28,11 @@ func main() {
 		hangman.NewRound(&hangmanData, &charSets)
 	}
 
+	if hangmanData.Attempts <= 0 {
+		fmt.Println("Poor José lost his head! Be ashamed.")
+	} else if hangmanData.IsDiscovered() {
+		fmt.Println("Congrats! You win.")
+	}
 	// TODO: here the game stops once attempts == 0 or
 	// word had been discovered, without any message printed or anything.
 }
