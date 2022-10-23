@@ -17,26 +17,32 @@ type HangManData struct {
 	UsedLetters []string
 }
 
-func (data *HangManData) InitGame(dictFile, mode string, charset [][]string) {
+func (data *HangManData) InitGame(dictFile, mode string, charset [][]string, saveFile string) {
+	rand.Seed(time.Now().UnixNano())
 	utils.ConsoleClear()
-	// Reads files and gets a random word from it.
-	data.FinalWord = RandomWord(ReadFile(dictFile))
 
-	data.Word = strings.Repeat("_", len(data.FinalWord))
-	n := len(data.FinalWord)/2 - 1
-	for i := 0; i < n; {
-		r := rand.Intn(len(data.FinalWord))
-		if data.Word[r] != byte('_') {
-			continue
-		} else {
-			data.Word = data.Word[:r] + string(data.FinalWord[r]) + data.Word[r+1:]
-			i++
+	if saveFile == "none" {
+		// Reads files and gets a random word from it.
+		data.FinalWord = RandomWord(ReadFile(dictFile))
+
+		data.Word = strings.Repeat("_", len(data.FinalWord))
+		n := len(data.FinalWord)/2 - 1
+		for i := 0; i < n; {
+			r := rand.Intn(len(data.FinalWord))
+			if data.Word[r] != byte('_') {
+				continue
+			} else {
+				data.Word = data.Word[:r] + string(data.FinalWord[r]) + data.Word[r+1:]
+				i++
+			}
 		}
+		data.Attempts = 10
+	} else {
+		data.LoadFromSave(saveFile)
 	}
 
-	data.Attempts = 10
 	if mode != "termbox" {
-		fmt.Println("Good luck, you have 10 attempts.")
+		fmt.Printf("Good luck, you have %v attempts.\n", data.Attempts)
 		data.PrintWord(charset)
 	}
 }

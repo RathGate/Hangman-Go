@@ -87,6 +87,10 @@ func (data *HangManData) ProcessAnswer(word, answer string) int {
 		// Answer = at least 2 characters.
 
 	} else {
+		if answer == "STOP" {
+			SavePrompt(*data)
+			return 0
+		}
 		if answer == word {
 			data.Word = data.FinalWord
 			return 1
