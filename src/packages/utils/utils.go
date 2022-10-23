@@ -50,14 +50,14 @@ func IsAlpha(str string) bool {
 	return regexp.MustCompile(`^[A-Za-z]+$`).MatchString(str)
 }
 
-func InitFlags() (dictPtr, josePtr, savePtr, modePtr, charsetPtr *string) {
-	dictPtr = flag.String("dict", "words.txt", "Name of the dictionary file in use.")
-	josePtr = flag.String("jose", "hangman.txt", "Name of the hangman ASCII art file in use.")
-	savePtr = flag.String("save", "none", "Loads or not the .json save file before launching the game.")
-	modePtr = flag.String("mode", "vanilla", "UI style that should be used.\n['vanilla', 'asciiArt', 'termbox']")
-	charsetPtr = flag.String("charset", "standard.txt", "Name of the ASCII charset file in use.\nNeeds -mode=asciiArt to be considered.")
+func InitFlags() (dictPtr, josePtr, modePtr, charsetPtr *string, savePtr *bool) {
+	dictPtr = flag.String(`dict`, `words.txt`, `Name of the dictionary file in use.`)
+	josePtr = flag.String(`jose`, `hangman.txt`, `Name of the hangman ASCII art file in use.`)
+	savePtr = flag.Bool(`save`, false, `Loads or not the .json save file before launching the game.`+"\n"+`(default "false")`)
+	modePtr = flag.String(`mode`, `vanilla`, `UI style that should be used.`+"\n"+`['vanilla', 'asciiArt', 'termbox']`)
+	charsetPtr = flag.String(`charset`, `standard.txt`, `Name of the ASCII charset file in use.`+"\n"+`Needs "-mode=asciiArt" to be taken into consideration.`)
 
 	flag.Parse()
 
-	return dictPtr, josePtr, savePtr, modePtr, charsetPtr
+	return dictPtr, josePtr, modePtr, charsetPtr, savePtr
 }

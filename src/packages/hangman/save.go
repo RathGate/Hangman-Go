@@ -57,8 +57,8 @@ func GetSaveInput() int {
 	return answer
 }
 
-func (data *HangManData) LoadFromSave(filename string) {
-	content, err := os.ReadFile("savefiles/" + filename)
+func (data *HangManData) LoadFromSave() {
+	content, err := os.ReadFile("savefiles/save.json")
 	if err != nil {
 		utils.PrintError(err.Error())
 	}

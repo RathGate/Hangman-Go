@@ -17,11 +17,11 @@ type HangManData struct {
 	UsedLetters []string
 }
 
-func (data *HangManData) InitGame(dictFile, mode string, charset [][]string, saveFile string) {
+func (data *HangManData) InitGame(dictFile, mode string, charset [][]string, saveFile bool) {
 	rand.Seed(time.Now().UnixNano())
 	utils.ConsoleClear()
 
-	if saveFile == "none" {
+	if !saveFile {
 		// Reads files and gets a random word from it.
 		data.FinalWord = RandomWord(ReadFile(dictFile))
 
@@ -38,7 +38,7 @@ func (data *HangManData) InitGame(dictFile, mode string, charset [][]string, sav
 		}
 		data.Attempts = 10
 	} else {
-		data.LoadFromSave(saveFile)
+		data.LoadFromSave()
 	}
 
 	if mode != "termbox" {

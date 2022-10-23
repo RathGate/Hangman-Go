@@ -33,9 +33,9 @@ Consequence:
       -charset string
         Name of the ASCII charset file in use.
         Needs -mode=asciiArt to be considered. (default "standard.txt")
-      -save string
+      -save bool
         Loads or not the .json save file before launching the game. 
-        (default "none")
+        (default "false")
 You can use several of these flags, or none.
 
 ### Options available:
@@ -44,7 +44,9 @@ You can use several of these flags, or none.
     jose: hangman.txt
     mode: vanilla // asciiArt // termbox
     charset: standard.txt // thinkertoy.txt // shadow.txt
-    save: save.json
+    save: true // false
+
+    string opt format: -opt=value ; bool opt format: -opt ;
 
 **NB**:
 1. For now, Termbox does handle save loading, but not saving into a file itself.

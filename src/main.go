@@ -13,7 +13,7 @@ var charSets ascii.Charsets
 
 func main() {
 	// Initializes random seed and empties console before game starts.
-	dictFile, joseFile, saveFile, uiMode, charFile := utils.InitFlags()
+	dictFile, joseFile, uiMode, charFile, saveFile := utils.InitFlags()
 
 	charSets.Jose = ascii.GetCharset("assets/jose/"+*joseFile, 10, 7)
 	if *uiMode == "asciiArt" {
