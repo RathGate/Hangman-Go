@@ -103,7 +103,7 @@ For now, the game itself does not work, nor does it register any input aside fro
 Here, the game is not displayed dynamically according to the terminal screen size. The maximum size of the game screen should be 25 x 75 cells.
 
     const MAX_HEIGHT = 25
-    const MAX_WIDTH = 70
+    const MAX_WIDTH = 71
 
 ## Handmade Functions
 

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"hangman/packages/ascii"
 	"hangman/packages/utils"
+	"sort"
 	"strings"
 )
 
@@ -20,13 +21,7 @@ func (data *HangManData) PrintWord(charset [][]string) {
 	if charset != nil {
 		ascii.PrintAscii(data.Word, charset)
 	} else {
-		for i, char := range data.Word {
-			fmt.Print(string(char))
-			if i != len(data.Word)-1 {
-				fmt.Print(" ")
-			}
-		}
-		fmt.Print("\n")
+		fmt.Println(strings.Join(strings.Split(data.Word, ""), " "))
 	}
 	fmt.Print("\n")
 }
@@ -34,27 +29,17 @@ func (data *HangManData) PrintWord(charset [][]string) {
 // Launches a round of the game.
 func NewRound(data *HangManData, charset *ascii.Charsets) {
 	// Asks user for input and processes the answer.
+	data.PrintStockedLetters()
 	answer := utils.GetUserInput()
 	processed := data.ProcessAnswer(data.FinalWord, answer)
-
-	if processed == 1 {
-		// Word has been discovered
-		data.Word = data.FinalWord
-	} else if processed == 0 {
-		data.RevealLetter(answer)
+	if processed == 0 {
 		data.PrintWord(charset.Characters)
-
-	} else {
-		// The player had made a mistake = remove points.
-		data.Attempts += processed
-		if data.Attempts < 0 {
-			data.Attempts = 0
-		}
-
+		// data.PrintStockedLetters()
+	} else if processed < 0 {
 		fmt.Printf("Not present in the word, %d attempts remaining.\n", data.Attempts)
+		// data.PrintStockedLetters()
 		ascii.PrintJose(charset.Jose, data.Attempts)
 		fmt.Println()
-
 	}
 }
 
@@ -67,22 +52,20 @@ func (data *HangManData) RevealLetter(answer string) {
 	}
 }
 
-func (data *HangManData) AddUsedLetters(letter string) {
+func (data *HangManData) AddUsedLetters(letter string) bool {
 	for _, char := range data.UsedLetters {
 		if char == letter {
-			fmt.Println("You already tried that letter.")
-			return
+			fmt.Print("You already tried that letter.\n\n")
+			return false
 		}
 	}
 	data.UsedLetters = append(data.UsedLetters, letter)
+	sort.Strings(data.UsedLetters)
+	return true
 }
 
 func (data *HangManData) PrintStockedLetters() {
-	fmt.Print("Used letters: ")
-	for _, letter := range data.UsedLetters {
-		fmt.Printf("%v ", letter)
-	}
-	fmt.Println()
+	fmt.Printf("Used letters: %v\n\n", strings.Join(data.UsedLetters, " "))
 }
 
 // Returns an int based on the points the player should lose or not.
@@ -91,20 +74,32 @@ func (data *HangManData) PrintStockedLetters() {
 func (data *HangManData) ProcessAnswer(word, answer string) int {
 	// Answer = 1 character
 	if len(answer) == 1 {
-		data.AddUsedLetters(answer)
-		data.PrintStockedLetters()
+		if !data.AddUsedLetters(answer) {
+			return 2
+		}
 		if strings.Contains(word, string(answer[0])) {
+			data.RevealLetter(answer)
 			return 0
 		} else {
+			data.LosePoints(1)
 			return -1
 		}
 		// Answer = at least 2 characters.
 
 	} else {
 		if answer == word {
+			data.Word = data.FinalWord
 			return 1
 		} else {
+			data.LosePoints(2)
 			return -2
 		}
+	}
+}
+
+func (data *HangManData) LosePoints(points int) {
+	data.Attempts -= points
+	if data.Attempts < 0 {
+		data.Attempts = 0
 	}
 }

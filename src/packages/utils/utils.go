@@ -55,7 +55,7 @@ func InitFlags() (dictPtr, josePtr, savePtr, modePtr, charsetPtr *string) {
 	josePtr = flag.String("jose", "hangman.txt", "Name of the hangman ASCII art file in use.")
 	savePtr = flag.String("save", "none", "Loads or not the .json save file before launching the game.")
 	modePtr = flag.String("mode", "vanilla", "UI style that should be used.\n['vanilla', 'asciiArt', 'termbox']")
-	charsetPtr = flag.String("charset", "standard.txt", "Name of the ASCII charset file in use.")
+	charsetPtr = flag.String("charset", "standard.txt", "Name of the ASCII charset file in use.\nNeeds -mode=asciiArt to be considered.")
 
 	flag.Parse()
 

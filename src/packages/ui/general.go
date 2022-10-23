@@ -5,14 +5,22 @@ package ui
 
 import (
 	"fmt"
+	"hangman/packages/ascii"
+	"hangman/packages/hangman"
+	"strconv"
+	"strings"
 
 	"github.com/nsf/termbox-go"
 )
 
 // Constants defining the size of the game screen.
-// Here, 70x25 cells (see ../assets/visuals).
+// Here, 71x25 cells (see ../assets/visuals).
 const MAX_HEIGHT = 25
-const MAX_WIDTH = 70
+const MAX_WIDTH = 71
+
+var data *hangman.HangManData
+var charset *ascii.Charsets
+var editbox EditBox
 
 // Defines lines in the Welcome and Help menus.
 var WELCOME_LINES = []string{
@@ -99,20 +107,24 @@ func GameMenu() {
 	// Welcome
 	PrintBox(0, 4, 18, 3, "", "Welcome !")
 	// Attempts
-	PrintBox(20, 4, 18, 3, "Attempts", fmt.Sprintf("%d", currentMenu))
+	PrintBox(20, 4, 18, 3, "Attempts", strconv.Itoa(data.Attempts))
 	//  Words or letters
-	PrintBox(40, 4, 28, 18, "Hangman", "")
+	PrintBox(40, 4, 28, 19, "Hangman", "")
+	if data.Attempts != 10 {
+		DrawJose(40, 4, 28, 19, charset.Jose, data.Attempts)
+	}
 	//  Words or letters
-	PrintBox(0, 9, 38, 3, "Suggest a word or a letter", "HELLOWORLD")
+	editbox.PrintEditBox(0, 9, 38, 3)
 	//  Word
-	PrintBox(0, 14, 38, 3, "Word", "_ _ L L O _ O _ R _ L _")
+	PrintBox(0, 14, 38, 3, "Word", strings.Join(strings.Split(data.Word, ""), " "))
 	// Used letters
-	PrintBox(0, 19, 38, 3, "Wrong letters", "B F P")
+	PrintBox(0, 19, 38, 4, "Used letters", strings.Join(data.UsedLetters, " "))
 }
 
 // Prints both "Welcome" and "Help" menu as they have the same structure.
 // Here, content should be `WELCOME_LINES` or `HELP_LINES` string array.
 func TextMenu(x, y, w, h int, title string, content []string) {
+	termbox.HideCursor()
 	PrintBox(x, y, w, h, title, "")
 	// Content:
 	for i, line := range content {
@@ -127,7 +139,9 @@ func TextMenu(x, y, w, h int, title string, content []string) {
 	}
 }
 
-func LaunchTBGame() {
+func LaunchTBGame(hangmanData *hangman.HangManData, charSets *ascii.Charsets) {
+	data = hangmanData
+	charset = charSets
 	// Termbox Initialization, should be done before any other function call.
 	// After successful initialization, the library must be finalized using 'Close' function,
 	// which is done here with defer function.
@@ -143,15 +157,23 @@ func LaunchTBGame() {
 	// Draws the initial canvas.
 	redrawHangman(0, 0, MAX_WIDTH, MAX_HEIGHT)
 
-	// Sets the input the user can use to interact with the program.
-mainloop:
-	for {
-		switch ev := termbox.PollEvent(); ev.Type {
-		case termbox.EventKey:
+	// mainloop:
+	// 2 = player quitted; 1 = player lost; 0 = player won.
+	switch RunGame(hangmanData) {
+	case 1:
+		RunResults(hangmanData)
+	case 2:
+		// méga lul
+	}
+}
+
+func RunGame(data *hangman.HangManData) (state int) {
+	for data.Attempts > 0 {
+		if ev := termbox.PollEvent(); ev.Type == termbox.EventKey {
 			switch ev.Key {
 			// Reaction to "escape" key.
 			case termbox.KeyEsc:
-				break mainloop
+				return 2
 				// Reaction to "arrow left" key.
 			case termbox.KeyArrowLeft:
 				switchMenu(-1)
@@ -159,11 +181,47 @@ mainloop:
 			case termbox.KeyArrowRight:
 				switchMenu(1)
 			}
-			// Error handle.
-		case termbox.EventError:
+			if currentMenu == 1 {
+				switch ev.Key {
+				case termbox.KeyBackspace, termbox.KeyBackspace2:
+					editbox.DeleteRune()
+				case termbox.KeyDelete, termbox.KeyCtrlD:
+					editbox.DeleteRuneForward()
+				case termbox.KeyEnter:
+					data.ProcessAnswer(data.FinalWord, strings.ToUpper(string(editbox.text)))
+					// Empties the Editbox
+					var temp EditBox
+					editbox = temp
+				default:
+					if ev.Ch != 0 {
+						editbox.InsertRune(ev.Ch)
+					}
+
+				}
+			}
+		} else if ev.Type == termbox.EventError {
 			panic(ev.Err)
+		}
+
+		if data.IsDiscovered() {
+			return 0
 		}
 		// Redraws the canvas after the user has interacted with the program.
 		redrawHangman(0, 0, MAX_WIDTH, MAX_HEIGHT)
+	}
+	return 1
+}
+
+func GetCenteredPos(baseX, baseY, boxW, boxH, elemW, elemH int) (posX, posY int) {
+	posX = baseX + (boxW / 2) - (elemW / 2)
+	posY = baseY + (boxH / 2) - (elemH / 2)
+	return posX, posY
+}
+
+func DrawJose(x, y, w, h int, joses [][]string, attempts int) {
+	position := len(joses) - 1 - attempts
+	posX, posY := GetCenteredPos(x, y, w, h, len(joses[0]), len(joses))
+	for i, line := range joses[position] {
+		PrintText(posX, posY+i, coldef, coldef, line)
 	}
 }

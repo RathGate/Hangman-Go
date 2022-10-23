@@ -18,18 +18,17 @@ func main() {
 	dictFile, joseFile, _, uiMode, charFile := utils.InitFlags()
 	rand.Seed(time.Now().UnixNano())
 	charSets.Jose = ascii.GetCharset("assets/jose/"+*joseFile, 10, 7)
+	if *uiMode == "asciiArt" {
+		charSets.Characters = ascii.GetCharset("assets/ascii/"+*charFile, 95, 8)
+	}
 	hangmanData.InitGame(*dictFile, *uiMode, charSets.Characters)
 
 	if *uiMode == "termbox" {
-		ui.LaunchTBGame()
+		ui.LaunchTBGame(&hangmanData, &charSets)
 	} else {
+
 		for hangmanData.Attempts > 0 && !hangmanData.IsDiscovered() {
 			hangman.NewRound(&hangmanData, &charSets)
-		}
-
-		if *uiMode == "asciiArt" {
-			charSets.Characters = ascii.GetCharset("assets/ascii/"+*charFile, 95, 8)
-			fmt.Println("success")
 		}
 		if hangmanData.Attempts <= 0 {
 			fmt.Println("Poor José lost his head! Be ashamed.")
@@ -37,7 +36,4 @@ func main() {
 			fmt.Println("Congrats! You win.")
 		}
 	}
-
-	// TODO: here the game stops once attempts == 0 or
-	// word had been discovered, without any message printed or anything.
 }
