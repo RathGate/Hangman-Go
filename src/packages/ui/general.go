@@ -21,6 +21,7 @@ const MAX_WIDTH = 71
 var data *hangman.HangManData
 var charset *ascii.Charsets
 var editbox EditBox
+var FINAL_WORD string
 
 // Defines lines in the Welcome and Help menus.
 var WELCOME_LINES = []string{
@@ -141,6 +142,7 @@ func TextMenu(x, y, w, h int, title string, content []string) {
 
 func LaunchTBGame(hangmanData *hangman.HangManData, charSets *ascii.Charsets) {
 	data = hangmanData
+	FINAL_WORD = data.FinalWord
 	charset = charSets
 	// Termbox Initialization, should be done before any other function call.
 	// After successful initialization, the library must be finalized using 'Close' function,
@@ -161,9 +163,9 @@ func LaunchTBGame(hangmanData *hangman.HangManData, charSets *ascii.Charsets) {
 	// 2 = player quitted; 1 = player lost; 0 = player won.
 	switch RunGame(hangmanData) {
 	case 1:
-		RunResults(hangmanData)
-	case 2:
-		// méga lul
+		RunResults(hangmanData, "loss")
+	case 0:
+		RunResults(hangmanData, "win")
 	}
 }
 
