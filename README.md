@@ -1,6 +1,6 @@
 # Hangman Classic
 
-Hangman game, realized by Eva Chibane and Marianne Corbel based on [these instructions].(https://github.com/Lyon-Ynov-Campus/YTrack/tree/master/subjects/hangman/hangman-classic)
+Hangman game, realized by Eva Chibane and Marianne Corbel based on [these instructions](https://github.com/Lyon-Ynov-Campus/YTrack/tree/master/subjects/hangman/hangman-classic).
 
 ## About
 
