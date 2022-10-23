@@ -23,8 +23,10 @@ func SavePrompt(data HangManData) {
 		return
 	case 1:
 		SaveGame(data)
+		fmt.Println("Game saved successfully ! See you later !")
 		os.Exit(1)
 	case 2:
+		fmt.Println("Have a nice day ♪")
 		os.Exit(1)
 	}
 }
