@@ -8,6 +8,10 @@ This exercise must be submitted for notation before the 24th of October 2022. It
 
 It is up to you to take them into consideration, or not. ♪
 
+If you're curious about our implementation of Termbox, a documentation page is available [here](https://github.com/RathGate/Corbel_Chibane_Hangman/tree/main/src/packages/ui), written by ourselves as well.
+
+Our workflow has been documented [here](https://ynov890827.monday.com/boards/1131253654)
+
 ## How to use the program
 
 This program has been tested and should work at least on Windows Terminal, both in and out of Visual Studio Code. Some tests should be done shortly in order to check it out soon.
@@ -46,11 +50,5 @@ You can use several of these flags, or none.
 1. For now, Termbox does handle save loading, but not saving into a file itself.
 2. A saved game is not bound to its original game mode, ie. a game saved while is asciiArt mode can be loaded with -mode=termbox. But be aware of the point above.
 3. Of course, to be taken into consideration, charset flag must come with -mode=asciiArt.
-
-### Options available:
-
-If you're curious about our implementation of Termbox, a documentation page is available [here](https://github.com/RathGate/Corbel_Chibane_Hangman/tree/main/src/packages/ui), written by ourselves as well.
-
-Our workflow has been documented [here](https://ynov890827.monday.com/boards/1131253654)
 
 Enjoy the game ! ♥
