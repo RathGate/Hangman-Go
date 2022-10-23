@@ -73,6 +73,9 @@ func (data *HangManData) PrintStockedLetters() {
 // If 1, the right word has been suggested, the player has won.
 func (data *HangManData) ProcessAnswer(word, answer, env string) int {
 	// Answer = 1 character
+	if !utils.IsAlpha(answer) {
+		return 0
+	}
 	if len(answer) == 1 {
 		if !data.AddUsedLetters(answer) {
 			return 2

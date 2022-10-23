@@ -7,18 +7,17 @@ import (
 	"github.com/nsf/termbox-go"
 )
 
-var LOSS_LINES = []string{
-	fmt.Sprintf("Too bad... The word was '%v'.\n", FINAL_WORD),
-	"\n",
-	"Poor José lost his head! Be ashamed.",
-}
-var WIN_LINES = []string{
-	fmt.Sprintf("You had it ! The word was '%v'.\n", FINAL_WORD),
-	"\n",
-	"Poor José won't lose his head this time. Congrats ! ♥",
-}
-
 func DrawResults(x, y, w, h int, result string) {
+	var LOSS_LINES = []string{
+		fmt.Sprintf("Too bad... The word was '%v'.\n", data.FinalWord),
+		"\n",
+		"Poor José lost his head! Be ashamed.",
+	}
+	var WIN_LINES = []string{
+		fmt.Sprintf("You had it ! The word was '%v'.\n", data.FinalWord),
+		"\n",
+		"Poor José won't lose his head this time. Congrats ! ♥",
+	}
 	PrintBox(0, 0, w, 1, "", "R E S U L T S")
 	if result == "loss" {
 		TextMenu(x, y+3, w, 17, "", LOSS_LINES)
