@@ -31,7 +31,7 @@ func NewRound(data *HangManData, charset *ascii.Charsets) {
 	// Asks user for input and processes the answer.
 	data.PrintStockedLetters()
 	answer := utils.GetUserInput()
-	processed := data.ProcessAnswer(data.FinalWord, answer)
+	processed := data.ProcessAnswer(data.FinalWord, answer, "")
 	if processed == 0 {
 		data.PrintWord(charset.Characters)
 		// data.PrintStockedLetters()
@@ -71,7 +71,7 @@ func (data *HangManData) PrintStockedLetters() {
 // Returns an int based on the points the player should lose or not.
 // If 0, a letter had been discovered, if > 0, points should be lost.
 // If 1, the right word has been suggested, the player has won.
-func (data *HangManData) ProcessAnswer(word, answer string) int {
+func (data *HangManData) ProcessAnswer(word, answer, env string) int {
 	// Answer = 1 character
 	if len(answer) == 1 {
 		if !data.AddUsedLetters(answer) {
@@ -87,7 +87,7 @@ func (data *HangManData) ProcessAnswer(word, answer string) int {
 		// Answer = at least 2 characters.
 
 	} else {
-		if answer == "STOP" {
+		if answer == "STOP" && env != "termbox" {
 			SavePrompt(*data)
 			return 0
 		}

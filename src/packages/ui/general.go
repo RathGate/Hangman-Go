@@ -190,7 +190,7 @@ func RunGame(data *hangman.HangManData) (state int) {
 				case termbox.KeyDelete, termbox.KeyCtrlD:
 					editbox.DeleteRuneForward()
 				case termbox.KeyEnter:
-					data.ProcessAnswer(data.FinalWord, strings.ToUpper(string(editbox.text)))
+					data.ProcessAnswer(data.FinalWord, strings.ToUpper(string(editbox.text)), "termbox")
 					// Empties the Editbox
 					var temp EditBox
 					editbox = temp
