@@ -221,9 +221,11 @@ func GetCenteredPos(baseX, baseY, boxW, boxH, elemW, elemH int) (posX, posY int)
 }
 
 func DrawJose(x, y, w, h int, joses [][]string, attempts int) {
-	position := len(joses) - 1 - attempts
-	posX, posY := GetCenteredPos(x, y, w, h, len(joses[0]), len(joses))
-	for i, line := range joses[position] {
-		PrintText(posX, posY+i, coldef, coldef, line)
+	if attempts != 10 {
+		position := len(joses) - 1 - attempts
+		posX, posY := GetCenteredPos(x, y, w, h, len(joses[0]), len(joses))
+		for i, line := range joses[position] {
+			PrintText(posX, posY+i, coldef, coldef, line)
+		}
 	}
 }
