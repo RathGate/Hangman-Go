@@ -53,4 +53,4 @@ You can use several of these flags, or none.
 2. A saved game is not bound to its original game mode, ie. a game saved while is asciiArt mode can be loaded with -mode=termbox. But be aware of the point above.
 3. Of course, to be taken into consideration, charset flag must come with -mode=asciiArt.
 
-Enjoy the game ! ♥
+Enjoy the game ! ♥ 
